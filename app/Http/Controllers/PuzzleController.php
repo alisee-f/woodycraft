@@ -3,52 +3,53 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Categorie;
 use App\Models\Puzzle;
 
 class PuzzleController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Affiche la liste de tous les puzzles.
      */
     public function index()
     {
         $puzzles = Puzzle::all();
-        return view ('puzzles.index', compact('puzzles'));
+        return view('puzzles.index', compact('puzzles'));
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Affiche le formulaire de création d'un puzzle.
      */
     public function create()
     {
-        return view('puzzles.create');
+        $categories = Categorie::all();
+        return view('puzzles.create', compact('categories'));
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Enregistre un nouveau puzzle en base.
      */
     public function store(Request $request)
     {
-        $date = $request->validate([
-            'nom' => 'required|max:100',
-            'categorie' => 'required|max:100',
+        // Debug : vérifier que les données arrivent
+        // dd($request->all());
+
+        $data = $request->validate([
+            'nom' => 'required|max:255',
             'description' => 'required|max:500',
-            'image' => 'required|max:100',
-            'prix' => 'required|numeric|between:0,99.99',
+            'image' => 'required|max:255',
+            'prix' => 'required|numeric|between:0,999.99',
+            'categorie_id' => 'required|exists:categories,id',
         ]);
 
-        $puzzle = new Puzzle();
-        $puzzle->nom = $request->nom;
-        $puzzle->categorie = $request->categorie;
-        $puzzle->description = $request->description;
-        $puzzle->image = $request->image;
-        $puzzle->prix = $request->prix;
-        $puzzle->save();
-        return back()->with('message',"Le puzzle a bien été créé !");
+        // Création du puzzle
+        Puzzle::create($data);
+
+        return redirect()->route('puzzles.index')->with('message', "Le puzzle a bien été créé !");
     }
 
     /**
-     * Display the specified resource.
+     * Affiche les détails d'un puzzle.
      */
     public function show(Puzzle $puzzle)
     {
@@ -56,42 +57,38 @@ class PuzzleController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Affiche le formulaire d'édition d'un puzzle.
      */
     public function edit(Puzzle $puzzle)
     {
-        return view('puzzles.edit', compact('puzzle'));
+        $categories = Categorie::all();
+        return view('puzzles.edit', compact('puzzle', 'categories'));
     }
 
     /**
-     * Update the specified resource in storage.
+     * Met à jour un puzzle existant.
      */
     public function update(Request $request, Puzzle $puzzle)
     {
         $data = $request->validate([
-            'nom' => 'required|max:100',
-            'categorie' => 'required|max:100',
+            'nom' => 'required|max:255',
             'description' => 'required|max:500',
-            'image' => 'required|max:100',
-            'prix' => 'required|numeric|between:0,99.99',
+            'image' => 'required|max:255',
+            'prix' => 'required|numeric|between:0,999.99',
+            'categorie_id' => 'required|exists:categories,id',
         ]);
-        
-        $puzzle->nom = $request->nom;
-        $puzzle->categorie = $request->categorie;
-        $puzzle->description = $request->description;
-        $puzzle->image = $request->image;
-        $puzzle->prix = $request->prix;
-        $puzzle->save();
-        return back()->with('message',"Le puzzle a bien été modifié !");        
+
+        $puzzle->update($data);
+
+        return back()->with('message', "Le puzzle a bien été modifié !");
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Supprime un puzzle.
      */
     public function destroy(Puzzle $puzzle)
     {
         $puzzle->delete();
-        return back()->with('message',"Le puzzle a bien été supprimé !");
-
+        return back()->with('message', "Le puzzle a bien été supprimé !");
     }
 }

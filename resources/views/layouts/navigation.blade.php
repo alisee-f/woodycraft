@@ -12,13 +12,23 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('puzzles.index')" :active="request()->routeIs('puzzles.index')">
+                    <x-nav-link :href="route('categories.index')" :active="request()->routeIs('categories.index')">
                         {{ __('Accueil') }}
+                    </x-nav-link>
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('puzzles.index')" :active="request()->routeIs('puzzles.index')">
+                        {{ __('Puzzle') }}
                     </x-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('puzzles.create')" :active="request()->routeIs('puzzles.create')">
                         {{ __('Créer puzzle') }}
+                    </x-nav-link>
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('categories.create')" :active="request()->routeIs('categories.create')">
+                        {{ __('Créer catégorie') }}
                     </x-nav-link>
                 </div>
             </div>
@@ -72,13 +82,23 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('puzzles.index')" :active="request()->routeIs('puzzles.index')">
+            <x-responsive-nav-link :href="route('categories.index')" :active="request()->routeIs('categories.index')">
                 {{ __('Accueil') }}
+            </x-responsive-nav-link>
+        </div>
+        <div class="pt-2 pb-3 space-y-1">
+            <x-responsive-nav-link :href="route('puzzles.index')" :active="request()->routeIs('puzzles.index')">
+                {{ __('Puzzle') }}
             </x-responsive-nav-link>
         </div>
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('puzzles.create')" :active="request()->routeIs('puzzles.create')">
                 {{ __('Créer puzzle') }}
+            </x-responsive-nav-link>
+        </div>
+        <div class="pt-2 pb-3 space-y-1">
+            <x-responsive-nav-link :href="route('categories.create')" :active="request()->routeIs('categories.create')">
+                {{ __('Créer catégorie') }}
             </x-responsive-nav-link>
         </div>
 

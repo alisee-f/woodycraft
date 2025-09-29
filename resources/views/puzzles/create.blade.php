@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Create a puzzle') }}
+            {{ __('Créer un puzzle') }}
         </h2>
     </x-slot>
 
@@ -13,10 +13,11 @@
             </div>
         @endif
 
-        <form action="{{ route('puzzles.store') }}" method="post"> <!-- quand clique bouton, renvoie vers la route puzzles.store par la methode http post-->
-            @csrf <!--principe de cybersécurité-->
+        <form action="{{ route('puzzles.store') }}" method="POST">
+            @csrf
+
             <!-- Nom -->
-            <div>
+            <div class="mt-4">
                 <x-input-label for="nom" :value="__('Nom')" />
                 <x-text-input 
                     id="nom" 
@@ -24,25 +25,33 @@
                     type="text" 
                     name="nom" 
                     :value="old('nom')" 
-                    required autofocus 
+                    required 
+                    autofocus 
                 />
                 <x-input-error :messages="$errors->get('nom')" class="mt-2" />
             </div>
 
-            <div>
-                <x-input-label for="categorie" :value="__('Categorie')" />
-                <x-text-input 
-                    id="categorie" 
-                    class="block mt-1 w-full" 
-                    type="text" 
-                    name="categorie" 
-                    :value="old('categorie')" 
-                    required autofocus 
-                />
-                <x-input-error :messages="$errors->get('categorie')" class="mt-2" />
+            <!-- Catégorie -->
+            <div class="mt-4">
+                <x-input-label for="categorie_id" :value="__('Catégorie')" />
+                <select 
+                    id="categorie_id" 
+                    name="categorie_id" 
+                    class="block mt-1 w-full border-gray-300 rounded-md shadow-sm" 
+                    required
+                >
+                    <option value="">{{ __('-- Choisir une catégorie --') }}</option>
+                    @foreach($categories as $categorie)
+                        <option value="{{ $categorie->id }}" {{ old('categorie_id') == $categorie->id ? 'selected' : '' }}>
+                            {{ $categorie->nom }}
+                        </option>
+                    @endforeach
+                </select>
+                <x-input-error :messages="$errors->get('categorie_id')" class="mt-2" />
             </div>
 
-            <div>
+            <!-- Description -->
+            <div class="mt-4">
                 <x-input-label for="description" :value="__('Description')" />
                 <x-text-input 
                     id="description" 
@@ -50,40 +59,44 @@
                     type="text" 
                     name="description" 
                     :value="old('description')" 
-                    required autofocus 
+                    required 
                 />
                 <x-input-error :messages="$errors->get('description')" class="mt-2" />
             </div>
 
-            <div>
-                <x-input-label for="image" :value="__('Image')" />
+            <!-- Image -->
+            <div class="mt-4">
+                <x-input-label for="image" :value="__('Image (URL)')" />
                 <x-text-input 
                     id="image" 
                     class="block mt-1 w-full" 
                     type="text" 
                     name="image" 
                     :value="old('image')" 
-                    required autofocus 
+                    required 
                 />
                 <x-input-error :messages="$errors->get('image')" class="mt-2" />
             </div>
 
-            <div>
-                <x-input-label for="prix" :value="__('Prix')" />
+            <!-- Prix -->
+            <div class="mt-4">
+                <x-input-label for="prix" :value="__('Prix (€)')" />
                 <x-text-input 
                     id="prix" 
                     class="block mt-1 w-full" 
-                    type="text" 
+                    type="number" 
+                    step="0.01" 
                     name="prix" 
                     :value="old('prix')" 
-                    required autofocus 
+                    required 
                 />
                 <x-input-error :messages="$errors->get('prix')" class="mt-2" />
             </div>
 
-            <div class="flex items-center justify-end mt-4">
-                <x-primary-button class="ml-3">
-                    {{ __('Send') }}
+            <!-- Bouton de soumission -->
+            <div class="flex items-center justify-end mt-6">
+                <x-primary-button>
+                    {{ __('Enregistrer') }}
                 </x-primary-button>
             </div>
         </form>

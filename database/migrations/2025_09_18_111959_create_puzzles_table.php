@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('puzzles', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
             $table->string('nom');
-            $table->string('categorie');
             $table->string('description');
             $table->string('image');
-            $table->float('prix');
+            $table->decimal('prix', 8, 2);
+            $table->foreignId('categorie_id')->constrained()->onDelete('cascade');
+            $table->timestamps();
         });
     }
 

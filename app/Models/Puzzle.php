@@ -15,5 +15,9 @@ class Puzzle extends Model
         'description',
         'prix',
         'image',
+        'categorie_id',
     ];
+    public function categorie(){
+        return $this->belongsTo(Categorie::class);
+    }
 }

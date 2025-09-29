@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PuzzleController;
+use App\Http\Controllers\CategorieController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,4 +32,7 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 
-Route::resource('puzzles', PuzzleController::class)->middleware('auth');
+Route::resource('puzzles', PuzzleController::class);
+Route::resource('categories', CategorieController::class)->middleware('auth');
+Route::get('/categories/{id}', [CategorieController::class, 'show'])->name('categories.show');
+
