@@ -1,33 +1,32 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Produits de la catégorie : ') . $categorie->nom }}
+            {{ $puzzle->nom }}
         </h2>
     </x-slot>
 
     <div class="py-6">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            @if($categorie->puzzles->isEmpty())
-                <div class="bg-white p-6 rounded shadow text-center text-gray-500">
-                    Aucun produit dans cette catégorie.
-                </div>
-            @else
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                    @foreach($categorie->puzzles as $puzzle)
-                        <div class="bg-white rounded shadow overflow-hidden">
-                            <img src="{{ $puzzle->image }}" alt="{{ $puzzle->nom }}" class="w-full h-48 object-cover">
-                            <div class="p-4">
-                                <h3 class="font-semibold text-lg mb-2">{{ $puzzle->nom }}</h3>
-                                <p class="text-gray-600 text-sm mb-2">{{ $puzzle->description }}</p>
-                                <p class="font-bold text-gray-800 mb-4">{{ number_format($puzzle->prix, 2) }} €</p>
-                                <a href="{{ route('puzzles.show', $puzzle->id) }}" class="inline-block px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
-                                    Voir le produit
-                                </a>
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-            @endif
+        <div class="max-w-3xl mx-auto sm:px-6 lg:px-8 bg-white p-6 rounded shadow">
+            <img src="{{ $puzzle->image }}" alt="{{ $puzzle->nom }}" class="w-full h-64 object-cover mb-4 rounded">
+            
+            <h3 class="font-semibold text-2xl mb-2">{{ $puzzle->nom }}</h3>
+            <p class="text-gray-600 mb-4">{{ $puzzle->description }}</p>
+            
+            <p class="font-bold text-gray-800 text-xl mb-4">Prix : {{ number_format($puzzle->prix, 2) }} €</p>
+            
+            <p class="text-gray-500 mb-4">Catégorie : {{ $puzzle->categorie->nom }}</p>
+
+            <a href="{{ url()->previous() }}" class="inline-block px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700">
+                Retour
+            </a>
+            <form action="{{ route('paniers.store', $puzzle->id) }}" method="POST">
+    @csrf
+    <button type="submit" class="px-4 py-2 bg-sky-500 text-white rounded hover:bg-sky-600">
+        Ajouter au panier
+    </button>
+</form>
+
+
         </div>
     </div>
 </x-app-layout>
