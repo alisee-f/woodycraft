@@ -19,6 +19,14 @@
             <a href="{{ url()->previous() }}" class="inline-block px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700">
                 Retour
             </a>
+            <form action="{{ route('paniers.store', $puzzle->id) }}" method="POST">
+    @csrf
+    <button type="submit" class="px-4 py-2 bg-sky-500 text-white rounded hover:bg-sky-600">
+        Ajouter au panier
+    </button>
+</form>
+
+
         </div>
     </div>
 </x-app-layout>

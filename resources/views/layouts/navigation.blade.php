@@ -18,12 +18,6 @@
                     <x-nav-link :href="route('puzzles.index')" :active="request()->routeIs('puzzles.index')" class="text-white hover:text-gray-200">
                         {{ __('Puzzle') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('puzzles.create')" :active="request()->routeIs('puzzles.create')" class="text-white hover:text-gray-200">
-                        {{ __('Créer puzzle') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('categories.create')" :active="request()->routeIs('categories.create')" class="text-white hover:text-gray-200">
-                        {{ __('Créer catégorie') }}
-                    </x-nav-link>
                 </div>
             </div>
 
@@ -37,9 +31,11 @@
                     <span class="text-white font-medium">{{ Auth::user()->name }}</span>
                 @endguest
 
-                <x-link-button href="#" class="bg-sky-700 text-white font-bold hover:bg-sky-800">
-                    Panier (0)
+                <x-link-button href="{{ route('paniers.index') }}" class="bg-sky-700 text-white font-bold hover:bg-sky-800">
+                Panier ({{ $panierCount }})
                 </x-link-button>
+
+
             </div>
 
             <!-- Hamburger -->
@@ -62,12 +58,6 @@
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('puzzles.index')" :active="request()->routeIs('puzzles.index')" class="text-white">
                 {{ __('Puzzle') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('puzzles.create')" :active="request()->routeIs('puzzles.create')" class="text-white">
-                {{ __('Créer puzzle') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('categories.create')" :active="request()->routeIs('categories.create')" class="text-white">
-                {{ __('Créer catégorie') }}
             </x-responsive-nav-link>
         </div>
     </div>

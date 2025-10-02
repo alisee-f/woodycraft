@@ -20,4 +20,11 @@ class Puzzle extends Model
     public function categorie(){
         return $this->belongsTo(Categorie::class);
     }
+
+    public function paniers()
+{
+    return $this->belongsToMany(Panier::class, 'appartient')
+                ->withPivot('quantite')
+                ->withTimestamps();
+}
 }
