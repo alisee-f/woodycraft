@@ -25,7 +25,7 @@ class AppServiceProvider extends ServiceProvider
         View::composer('*', function ($view) {
             $count = 0;
             if (auth()->check()) {
-                $panier = Panier::where('utilisateur_id', auth()->id())
+                $panier = Panier::where('user_id', auth()->id())
                                 ->where('statut', 'en_cours')
                                 ->with('puzzles')
                                 ->first();

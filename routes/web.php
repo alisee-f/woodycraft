@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PuzzleController;
 use App\Http\Controllers\CategorieController;
 use App\Http\Controllers\PanierController;
+use App\Http\Controllers\AdresseController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,3 +42,7 @@ Route::resource('paniers', PanierController::class);
 Route::post('/panier/{puzzle}', [PanierController::class, 'store'])->name('paniers.store');
 Route::patch('/panier/{puzzle}', [PanierController::class, 'update'])->name('paniers.update');
 Route::delete('/panier/{puzzle}', [PanierController::class, 'destroy'])->name('paniers.destroy');
+
+Route::get('/adresse', [AdresseController::class, 'index'])->name('adresse.index');
+Route::post('/adresse', [AdresseController::class, 'store'])->name('adresse.store');
+Route::put('/adresse/{adresse}', [AdresseController::class, 'update'])->name('adresse.update');

@@ -14,7 +14,7 @@ class PanierController extends Controller
     public function index()
     {
         // Récupérer le panier en cours de l'utilisateur connecté
-    $panier = Panier::where('utilisateur_id', auth()->id())
+    $panier = Panier::where('user_id', auth()->id())
     ->where('statut', 'en_cours')
     ->with('puzzles')
     ->first();
@@ -51,7 +51,7 @@ class PanierController extends Controller
     {
         // Récupérer ou créer le panier en cours de l'utilisateur
     $panier = Panier::firstOrCreate([
-        'utilisateur_id' => auth()->id(),
+        'user_id' => auth()->id(),
         'statut' => 'en_cours',
     ]);
 
@@ -94,7 +94,7 @@ class PanierController extends Controller
             'quantite' => 'required|integer|min:1'
         ]);
     
-        $panier = Panier::where('utilisateur_id', auth()->id())
+        $panier = Panier::where('user_id', auth()->id())
                         ->where('statut', 'en_cours')
                         ->firstOrFail();
     
@@ -111,7 +111,7 @@ class PanierController extends Controller
      */
     public function destroy(Puzzle $puzzle)
     {
-        $panier = Panier::where('utilisateur_id', auth()->id())
+        $panier = Panier::where('user_id', auth()->id())
                     ->where('statut', 'en_cours')
                     ->firstOrFail();
 
