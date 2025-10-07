@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Adresse extends Model
 {
     use HasFactory;
-    protected $fillable = ['user_id', 'numero', 'rue', 'ville', 'code_postal', 'pays'];
+    protected $fillable = ['numero','rue','ville','code_postal','pays','user_id',];
 
     public function user()
     {

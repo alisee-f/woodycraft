@@ -32,19 +32,26 @@ class AdresseController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'adresse' => 'required|string|max:255',
+            'numero' => 'required|integer',
+            'rue' => 'required|string|max:255',
+            'ville' => 'required|string|max:255',
+            'code_postal' => 'required|string|max:20',
+            'pays' => 'nullable|string|max:255',
         ]);
 
         $user = Auth::user();
 
+        // Création de l’adresse
         Adresse::create([
             'user_id' => $user->id,
-            'numero' => $request->numero,
-            'adresse' => $request->adresse,
+            'numero' => $validated['numero'],
+            'rue' => $validated['rue'],
+            'ville' => $validated['ville'],
+            'code_postal' => $validated['code_postal'],
+            'pays' => $validated['pays'] ?? 'France',
         ]);
-        
 
-        return redirect()->route('adresses.show')->with('success', 'Adresse enregistrée !');
+        return redirect()->route('adresses.show')->with('success', 'Adresse enregistrée avec succès !');
     }
     
 
@@ -54,8 +61,9 @@ class AdresseController extends Controller
     public function show(Adresse $adresse)
     {
         $user = Auth::user();
-        $adresse = $user->adresse;
-        return view('adresses.show', compact('adresse'));
+        $adresses = Adresse::where('user_id', $user->id)->get();
+    
+        return view('adresses.show', compact('adresses'));
     }
 
     /**
@@ -71,17 +79,17 @@ class AdresseController extends Controller
      */
     public function update(Request $request, Adresse $adresse)
     {
-        $this->authorize('update', $adresse); // sécurité (facultatif)
-
-        $request->validate([
-            'adresse' => 'required|string|max:255',
+        $validated = $request->validate([
+            'numero' => 'required|integer',
+            'rue' => 'required|string|max:255',
+            'ville' => 'required|string|max:255',
+            'code_postal' => 'required|string|max:20',
+            'pays' => 'nullable|string|max:255',
         ]);
 
-        $adresse->update([
-            'adresse' => $request->adresse,
-        ]);
+        $adresse->update($validated);
 
-        return redirect()->route('adresses.show')->with('success', 'Adresse modifiée avec succès.');
+        return redirect()->route('adresses.show')->with('success', 'Adresse mise à jour avec succès !');
     }
 
     /**

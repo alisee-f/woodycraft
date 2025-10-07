@@ -23,23 +23,29 @@
                             
                             <!-- Boutons + / - -->
                             <div class="flex items-center mt-2 space-x-2">
-                                <form action="{{ route('paniers.update', $puzzle->id) }}" method="POST">
+                                <!-- Bouton - -->
+                                <form action="{{ route('paniers.update', $puzzle->id) }}" method="POST" class="inline">
                                     @csrf
                                     @method('PATCH')
                                     <input type="hidden" name="quantite" value="{{ $puzzle->pivot->quantite - 1 }}">
-                                    <button type="submit" class="px-2 py-1 bg-gray-300 text-black rounded hover:bg-gray-400"
-                                        {{ $puzzle->pivot->quantite <= 1 ? 'disabled' : '' }}>
+                                    <button 
+                                        type="submit"
+                                        class="px-2 py-1 bg-gray-300 text-black rounded hover:bg-gray-400"
+                                        @if($puzzle->pivot->quantite <= 1) disabled @endif>
                                         -
                                     </button>
                                 </form>
 
                                 <span class="font-semibold">{{ $puzzle->pivot->quantite }}</span>
 
-                                <form action="{{ route('paniers.update', $puzzle->id) }}" method="POST">
+                                <!-- Bouton + -->
+                                <form action="{{ route('paniers.update', $puzzle->id) }}" method="POST" class="inline">
                                     @csrf
                                     @method('PATCH')
                                     <input type="hidden" name="quantite" value="{{ $puzzle->pivot->quantite + 1 }}">
-                                    <button type="submit" class="px-2 py-1 bg-gray-300 text-black rounded hover:bg-gray-400">
+                                    <button 
+                                        type="submit"
+                                        class="px-2 py-1 bg-gray-300 text-black rounded hover:bg-gray-400">
                                         +
                                     </button>
                                 </form>
@@ -47,10 +53,12 @@
                         </div>
 
                         <!-- Supprimer -->
-                        <form action="{{ route('paniers.destroy', $puzzle->id) }}" method="POST">
+                        <form action="{{ route('paniers.destroy', $puzzle->id) }}" method="POST" class="inline">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600">
+                            <button 
+                                type="submit"
+                                class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600">
                                 Supprimer
                             </button>
                         </form>
@@ -77,13 +85,13 @@
                 </p>
 
                 <a href="{{ route('adresses.show') }}" 
-                class="block w-full text-center bg-sky-500 text-white py-2 rounded hover:bg-sky-600">
-                Procéder au paiement
+                   class="block w-full text-center bg-sky-500 text-white py-2 rounded hover:bg-sky-600">
+                   Procéder au paiement
                 </a>
 
-
-                <a href="{{ route('categories.index') }}" class="block w-full text-center bg-gray-200 text-gray-700 py-2 rounded hover:bg-gray-300">
-                    Poursuivre mes achats
+                <a href="{{ route('categories.index') }}" 
+                   class="block w-full text-center bg-gray-200 text-gray-700 py-2 rounded hover:bg-gray-300">
+                   Poursuivre mes achats
                 </a>
             </div>
         </div>

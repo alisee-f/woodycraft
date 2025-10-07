@@ -46,9 +46,15 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function adresse()
+    public function adresses()
     {
-        return $this->hasOne(Adresse::class);
+        return $this->hasMany(\App\Models\Adresse::class);
+    }
+    
+
+    public function paniers()
+    {
+        return $this->hasMany(Panier::class);
     }
 
 }

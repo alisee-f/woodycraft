@@ -8,12 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 class Panier extends Model
 {
     use HasFactory;
-    protected $fillable = ['statut', 'mode_paiement', 'utilisateur_id'];
+    protected $fillable = ['user_id', 'statut'];
 
     public function puzzles()
     {
         return $this->belongsToMany(Puzzle::class, 'appartient')
                     ->withPivot('quantite')
                     ->withTimestamps();
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }
