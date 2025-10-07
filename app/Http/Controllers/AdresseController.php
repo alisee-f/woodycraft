@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Adresse;
 
 class AdresseController extends Controller
 {
@@ -13,7 +15,7 @@ class AdresseController extends Controller
     {
         $adresse = Adresse::where('user_id', auth()->id())->latest()->first();
 
-        return view('adresse.index', compact('adresse'));
+        return view('adresses.index', compact('adresse'));
     }
 
     /**
@@ -29,31 +31,31 @@ class AdresseController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'rue' => 'required|string|max:255',
-            'ville' => 'required|string|max:255',
-            'code_postal' => 'required|string|max:10',
-            'pays' => 'required|string|max:50',
+        $validated = $request->validate([
+            'adresse' => 'required|string|max:255',
         ]);
+
+        $user = Auth::user();
 
         Adresse::create([
-            'user_id' => auth()->id(),
+            'user_id' => $user->id,
             'numero' => $request->numero,
-            'rue' => $request->rue,
-            'ville' => $request->ville,
-            'code_postal' => $request->code_postal,
-            'pays' => $request->pays,
+            'adresse' => $request->adresse,
         ]);
+        
 
-        return redirect()->route('adresse.index')->with('success', 'Adresse enregistrée.');
+        return redirect()->route('adresses.show')->with('success', 'Adresse enregistrée !');
     }
+    
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Adresse $adresse)
     {
-        //
+        $user = Auth::user();
+        $adresse = $user->adresse;
+        return view('adresses.show', compact('adresse'));
     }
 
     /**
@@ -67,28 +69,27 @@ class AdresseController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Adresse $adresse)
     {
         $this->authorize('update', $adresse); // sécurité (facultatif)
 
         $request->validate([
-            'numero' => 'required|string|max:255',
-            'rue' => 'required|string|max:255',
-            'ville' => 'required|string|max:255',
-            'code_postal' => 'required|string|max:10',
-            'pays' => 'required|string|max:50',
+            'adresse' => 'required|string|max:255',
         ]);
 
-        $adresse->update($request->all());
+        $adresse->update([
+            'adresse' => $request->adresse,
+        ]);
 
-        return redirect()->route('adresse.index')->with('success', 'Adresse mise à jour.');
+        return redirect()->route('adresses.show')->with('success', 'Adresse modifiée avec succès.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Adresse $adresse)
     {
-        //
+        $adresse->delete();
+        return redirect()->route('adresses.show')->with('success', 'Adresse supprimée avec succès.');
     }
 }

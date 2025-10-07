@@ -20,7 +20,7 @@
                 </div>
 
                 <!-- Formulaire pour modifier -->
-                <form method="POST" action="{{ route('adresse.update', $adresse->id) }}" class="space-y-4 mt-6">
+                <form method="POST" action="{{ route('adresses.update', $adresse->id) }}" class="space-y-4 mt-6">
                     @csrf
                     @method('PUT')
 
@@ -36,7 +36,7 @@
 
             @else
                 <!-- Formulaire pour ajouter une adresse -->
-                <form method="POST" action="{{ route('adresse.store') }}" class="space-y-4">
+                <form method="POST" action="{{ route('adresses.store') }}" class="space-y-4">
                     @csrf
 
                     <input type="text" name="rue" placeholder="Rue" class="w-full border p-2 rounded">
@@ -51,7 +51,7 @@
             @endif
 
             <div class="mt-6">
-                <a href="{{ route('paiement.index') }}" class="block w-full text-center bg-gray-700 text-white py-2 rounded hover:bg-gray-800">
+                <a href="{{ route('adresses.show') }}" class="block w-full text-center bg-gray-700 text-white py-2 rounded hover:bg-gray-800">
                     Choix du paiement
                 </a>
             </div>

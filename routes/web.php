@@ -34,15 +34,23 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 
+/* --- Puzzles --- */
 Route::resource('puzzles', PuzzleController::class);
+
+/* --- Catégories --- */
 Route::resource('categories', CategorieController::class)->middleware('auth');
 Route::get('/categories/{id}', [CategorieController::class, 'show'])->name('categories.show');
 
+/* --- Panier --- */
 Route::resource('paniers', PanierController::class);
-Route::post('/panier/{puzzle}', [PanierController::class, 'store'])->name('paniers.store');
-Route::patch('/panier/{puzzle}', [PanierController::class, 'update'])->name('paniers.update');
-Route::delete('/panier/{puzzle}', [PanierController::class, 'destroy'])->name('paniers.destroy');
+Route::post('/paniers/{puzzle}', [PanierController::class, 'store'])->name('paniers.store');
+Route::patch('/paniers/{puzzle}', [PanierController::class, 'update'])->name('paniers.update');
+Route::delete('/paniers/{puzzle}', [PanierController::class, 'destroy'])->name('paniers.destroy');
 
-Route::get('/adresse', [AdresseController::class, 'index'])->name('adresse.index');
-Route::post('/adresse', [AdresseController::class, 'store'])->name('adresse.store');
-Route::put('/adresse/{adresse}', [AdresseController::class, 'update'])->name('adresse.update');
+/* --- Adresses --- */
+Route::middleware(['auth'])->group(function () {
+    Route::get('/adresses', [AdresseController::class, 'show'])->name('adresses.show');
+    Route::post('/adresses', [AdresseController::class, 'store'])->name('adresses.store');
+    Route::put('/adresses/{adresse}', [AdresseController::class, 'update'])->name('adresses.update');
+    Route::delete('/adresses/{adresse}', [AdresseController::class, 'destroy'])->name('adresses.destroy');
+});

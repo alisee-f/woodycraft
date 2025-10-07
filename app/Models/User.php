@@ -19,8 +19,11 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'prenom',
         'email',
         'password',
+        'role',
+        'telephone',
     ];
 
     /**
@@ -42,4 +45,10 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function adresse()
+    {
+        return $this->hasOne(Adresse::class);
+    }
+
 }

@@ -11,12 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('paniers', function (Blueprint $table) {
-            $table->id();
-            $table->string('statut');
-            $table->string('mode_paiement')->nullable();
-            $table->timestamps();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('prenom')->nullable();
+            $table->boolean('role')->default(false);
+            $table->string('telephone')->nullable();
         });
     }
 
@@ -25,6 +23,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('paniers');
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn(['prenom', 'role', 'telephone']);
+        });
     }
 };

@@ -76,9 +76,11 @@
                     {{ number_format($total + 5, 2) }} €
                 </p>
 
-                <a href="#" class="block w-full text-center bg-sky-500 text-white py-2 rounded hover:bg-sky-600">
-                    Procéder au paiement
+                <a href="{{ route('adresses.show') }}" 
+                class="block w-full text-center bg-sky-500 text-white py-2 rounded hover:bg-sky-600">
+                Procéder au paiement
                 </a>
+
 
                 <a href="{{ route('categories.index') }}" class="block w-full text-center bg-gray-200 text-gray-700 py-2 rounded hover:bg-gray-300">
                     Poursuivre mes achats
