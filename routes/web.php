@@ -7,6 +7,7 @@ use App\Http\Controllers\CategorieController;
 use App\Http\Controllers\PanierController;
 use App\Http\Controllers\AdresseController;
 use App\Http\Controllers\PaiementController;
+use App\Http\Controllers\AvisController;
 
 /*
 |--------------------------------------------------------------------------
@@ -58,3 +59,11 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::view('/erreur-connexion', 'erreur-connexion')->name('erreur.connexion');
+
+Route::get('/panier/{id}/avis', [AvisController::class, 'apresCommande'])
+    ->middleware('auth')
+    ->name('avis.apresCommande');
+
+Route::post('/puzzles/{puzzle}/avis', [AvisController::class, 'store'])
+    ->middleware('auth')
+    ->name('avis.store');

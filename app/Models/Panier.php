@@ -21,4 +21,9 @@ class Panier extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function appartient()
+    {
+        return $this->hasMany(Appartient::class); // lien vers la table pivot
+    }
 }

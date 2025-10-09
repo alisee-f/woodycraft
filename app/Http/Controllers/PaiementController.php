@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Adresse;
 use Barryvdh\DomPDF\Facade\Pdf;
+use App\Models\Panier;
 
 class PaiementController extends Controller
 {
@@ -39,12 +40,10 @@ class PaiementController extends Controller
     {
         $user = Auth::user();
 
-        // Récupération de l’adresse choisie
         $adresse = $adresseId
             ? $user->adresses()->where('id', $adresseId)->first()
             : $user->adresses()->first();
 
-        // Récupération du panier
         $panier = $user->paniers()->with('puzzles')->where('statut', 'en_cours')->first();
 
         $total = 0;
@@ -54,17 +53,28 @@ class PaiementController extends Controller
             }
         }
 
-        // 🧾 Génération du PDF à partir d’une vue Blade
-        $pdf = Pdf::loadView('paiements.facture', compact('user', 'adresse', 'panier', 'total'))
-                ->setPaper('a4', 'portrait');
+        $panier->update([
+            'statut' => 'valide',
+            'mode_paiement' => 'cheque',
+        ]);
 
-        // 💾 Téléchargement du fichier
-        return $pdf->download('Facture-WoodyCraft.pdf');
+        $pdf = Pdf::loadView('paiements.facture', compact('user', 'adresse', 'panier', 'total'))
+            ->setPaper('a4', 'portrait')
+            ->save(storage_path("app/public/factures/Facture-{$panier->id}.pdf"));
+
+        return redirect()->route('avis.apresCommande', $panier->id);
     }
 
         public function paypal($adresseId = null)
     {
-        return redirect()->away('https://www.paypal.com/fr/home/');
+        $user = Auth::user();
+
+        $panier = $user->paniers()->where('statut', 'en_cours')->first();
+        $panier->update([
+            'statut' => 'valide',
+            'mode_paiement' => 'paypal',
+        ]);
+        return redirect()->route('avis.apresCommande', $panier->id);
     }
 
 }
