@@ -14,7 +14,11 @@
                     <div class="flex items-center justify-between bg-white p-4 rounded shadow">
                         
                         <!-- Image -->
-                        <img src="{{ $puzzle->image }}" alt="{{ $puzzle->nom }}" class="w-24 h-24 object-cover rounded">
+                        <img src="{{ asset('images/puzzles/' . $puzzle->image) }}" 
+                        alt="{{ $puzzle->nom }}" 
+                        class="w-32 h-32 object-contain rounded shadow">
+
+
 
                         <!-- Infos produit -->
                         <div class="flex-1 px-4">
