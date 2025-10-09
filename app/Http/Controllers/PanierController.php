@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Support\Facades\Auth;
+
 
 use Illuminate\Http\Request;
 use App\Models\Panier;
@@ -14,7 +16,7 @@ class PanierController extends Controller
     public function index()
     {
         // Récupérer le panier en cours de l'utilisateur connecté
-    $panier = Panier::where('utilisateur_id', auth()->id())
+    $panier = Panier::where('user_id', auth()->id())
     ->where('statut', 'en_cours')
     ->with('puzzles')
     ->first();
@@ -49,25 +51,48 @@ class PanierController extends Controller
      */
     public function store(Request $request, Puzzle $puzzle)
     {
-        // Récupérer ou créer le panier en cours de l'utilisateur
-    $panier = Panier::firstOrCreate([
-        'utilisateur_id' => auth()->id(),
-        'statut' => 'en_cours',
-    ]);
+        if (!auth()->check()) {
+            return redirect()->route('erreur.connexion');
+        }
+    
+        // \Log::info('Ajout au panier : user=' . auth()->id() . ' puzzle=' . $puzzle->id);
 
-    // Vérifier si le puzzle est déjà dans le panier
-    if ($panier->puzzles()->where('puzzle_id', $puzzle->id)->exists()) {
-        // Si déjà présent → on incrémente la quantité
-        $panier->puzzles()->updateExistingPivot($puzzle->id, [
-            'quantite' => \DB::raw('quantite + 1')
-        ]);
-    } else {
-        // Sinon → on l'ajoute avec une quantité de 1
-        $panier->puzzles()->attach($puzzle->id, ['quantite' => 1]);
-    }
+        // Récupère le panier en cours
+        $panier = Panier::where('user_id', auth()->id())
+                        ->where('statut', 'en_cours')
+                        ->first();
+    
+        // S’il n’existe pas, on le crée
+        if (!$panier) {
+            $panier = new Panier([
+                'user_id' => auth()->id(),
+                'statut' => 'en_cours',
+            ]);
+            $panier->save();
+            // \Log::info('Nouveau panier créé : ' . $panier->id);
+        }
 
-    return redirect()->back()->with('success', 'Puzzle ajouté au panier !');
+        // \Log::info('Panier trouvé : ' . $panier->id);
+    
+        // Vérifie si le produit est déjà dans le panier
+        $existant = $panier->puzzles()->where('puzzle_id', $puzzle->id)->first();
+    
+        if ($existant) {
+            // Incrémente la quantité
+            // \Log::info('Déjà présent, on incrémente');
+            $panier->puzzles()->updateExistingPivot($puzzle->id, [
+                'quantite' => \DB::raw('quantite + 1')
+            ]);
+        } else {
+            // Ajoute un nouveau produit
+            // \Log::info('Nouveau produit ajouté au panier');
+            $panier->puzzles()->attach($puzzle->id, ['quantite' => 1]);
+        }
+    
+        return redirect()->back()->with('success', 'Puzzle ajouté au panier !');
     }
+    
+
 
     /**
      * Display the specified resource.
@@ -91,19 +116,37 @@ class PanierController extends Controller
     public function update(Request $request, Puzzle $puzzle)
     {
         $request->validate([
-            'quantite' => 'required|integer|min:1'
+            'quantite' => 'required|integer|min:0',
         ]);
     
-        $panier = Panier::where('utilisateur_id', auth()->id())
+        $panier = Panier::where('user_id', auth()->id())
                         ->where('statut', 'en_cours')
-                        ->firstOrFail();
+                        ->first();
     
-        // Mise à jour de la quantité dans la table pivot
-        $panier->puzzles()->updateExistingPivot($puzzle->id, [
-            'quantite' => $request->quantite
-        ]);
+        if (!$panier) {
+            return redirect()->route('paniers.index')->with('error', 'Aucun panier trouvé.');
+        }
     
-        return redirect()->route('paniers.index')->with('success', 'Quantité mise à jour !');
+        if (!$panier->puzzles()->where('puzzle_id', $puzzle->id)->exists()) {
+            return redirect()->route('paniers.index');
+        }
+    
+        // Si quantité = 0 → supprime uniquement ce produit
+        if ($request->quantite == 0) {
+            $panier->puzzles()->detach($puzzle->id);
+        } else {
+            // Sinon → met à jour la quantité
+            $panier->puzzles()->updateExistingPivot($puzzle->id, [
+                'quantite' => $request->quantite
+            ]);
+        }
+    
+        // Supprime le panier s’il est vide
+        if ($panier->puzzles()->count() == 0) {
+            $panier->delete();
+        }
+    
+        return redirect()->route('paniers.index')->with('success', 'Panier mis à jour !');
     }
 
     /**
@@ -111,13 +154,28 @@ class PanierController extends Controller
      */
     public function destroy(Puzzle $puzzle)
     {
-        $panier = Panier::where('utilisateur_id', auth()->id())
-                    ->where('statut', 'en_cours')
-                    ->firstOrFail();
+        // Récupère le panier en cours du user connecté
+        $panier = Panier::where('user_id', auth()->id())
+        ->where('statut', 'en_cours')
+        ->first();
 
-    // Retirer complètement le puzzle du panier
-    $panier->puzzles()->detach($puzzle->id);
+        if (!$panier) {
+        return redirect()->route('paniers.index')->with('error', 'Aucun panier trouvé.');
+        }
 
-    return redirect()->route('paniers.index')->with('success', 'Produit supprimé du panier !');
+        // Vérifie que le produit existe dans le panier
+        if ($panier->puzzles()->where('puzzle_id', $puzzle->id)->exists()) {
+        // On supprime SEULEMENT la ligne pivot, PAS le panier
+        $panier->puzzles()->detach($puzzle->id);
+        }
+
+        // Si plus aucun produit dans le panier, on peut le supprimer complètement (optionnel)
+        if ($panier->puzzles()->count() == 0) {
+        $panier->delete();
+        }
+
+        return redirect()->route('paniers.index')->with('success', 'Produit supprimé du panier !');
     }
+
+    
 }

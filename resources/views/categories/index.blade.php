@@ -39,7 +39,7 @@
         {{ $puzzle->nom }}
     </a>
 </p>
-                                    <p class="text-gray-500">{{ $puzzle->price }} €</p>
+                                    <p class="text-gray-500">{{ $puzzle->prix }} €</p>
                                 </div>
                             @endforeach
                         </div>

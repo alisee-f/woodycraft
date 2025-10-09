@@ -19,8 +19,11 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'prenom',
         'email',
         'password',
+        'role',
+        'telephone',
     ];
 
     /**
@@ -42,4 +45,16 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function adresses()
+    {
+        return $this->hasMany(\App\Models\Adresse::class);
+    }
+    
+
+    public function paniers()
+    {
+        return $this->hasMany(Panier::class);
+    }
+
 }

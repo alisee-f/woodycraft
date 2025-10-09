@@ -15,9 +15,6 @@
                     <x-nav-link :href="route('categories.index')" :active="request()->routeIs('categories.index')" class="text-white hover:text-gray-200">
                         {{ __('Accueil') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('puzzles.index')" :active="request()->routeIs('puzzles.index')" class="text-white hover:text-gray-200">
-                        {{ __('Puzzle') }}
-                    </x-nav-link>
                 </div>
             </div>
 
@@ -28,7 +25,26 @@
                         Se connecter
                     </x-link-button>
                 @else
-                    <span class="text-white font-medium">{{ Auth::user()->name }}</span>
+                    <!-- Menu utilisateur -->
+                <div class="relative" x-data="{ openUser: false }">
+                    <button @click="openUser = !openUser" class="text-white font-medium flex items-center space-x-1 focus:outline-none">
+                        <span>{{ Auth::user()->name }}</span>
+                        <svg class="w-4 h-4 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+
+                    <div x-show="openUser" @click.away="openUser = false"
+                        class="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg py-2 z-50">
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">
+                                Se déconnecter
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
                 @endguest
 
                 <x-link-button href="{{ route('paniers.index') }}" class="bg-sky-700 text-white font-bold hover:bg-sky-800">
@@ -55,9 +71,6 @@
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('categories.index')" :active="request()->routeIs('categories.index')" class="text-white">
                 {{ __('Accueil') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('puzzles.index')" :active="request()->routeIs('puzzles.index')" class="text-white">
-                {{ __('Puzzle') }}
             </x-responsive-nav-link>
         </div>
     </div>

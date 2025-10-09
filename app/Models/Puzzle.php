@@ -15,6 +15,7 @@ class Puzzle extends Model
         'description',
         'prix',
         'image',
+        'stock',
         'categorie_id',
     ];
     public function categorie(){

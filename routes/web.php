@@ -5,16 +5,13 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PuzzleController;
 use App\Http\Controllers\CategorieController;
 use App\Http\Controllers\PanierController;
+use App\Http\Controllers\AdresseController;
+use App\Http\Controllers\PaiementController;
 
 /*
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
 */
 
 Route::get('/', function () {
@@ -33,11 +30,31 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 
-Route::resource('puzzles', PuzzleController::class);
-Route::resource('categories', CategorieController::class)->middleware('auth');
+
+Route::resource('categories', CategorieController::class);
 Route::get('/categories/{id}', [CategorieController::class, 'show'])->name('categories.show');
 
-Route::resource('paniers', PanierController::class);
-Route::post('/panier/{puzzle}', [PanierController::class, 'store'])->name('paniers.store');
-Route::patch('/panier/{puzzle}', [PanierController::class, 'update'])->name('paniers.update');
-Route::delete('/panier/{puzzle}', [PanierController::class, 'destroy'])->name('paniers.destroy');
+Route::resource('puzzles', PuzzleController::class);
+
+Route::middleware(['auth'])->group(function () {
+    Route::resource('paniers', PanierController::class)->parameters([
+        'paniers' => 'puzzle'
+    ]);
+    Route::post('/paniers/{puzzle}', [PanierController::class, 'store'])->name('paniers.store');
+
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/adresses', [AdresseController::class, 'show'])->name('adresses.show');
+    Route::post('/adresses', [AdresseController::class, 'store'])->name('adresses.store');
+    Route::put('/adresses/{adresse}', [AdresseController::class, 'update'])->name('adresses.update');
+    Route::delete('/adresses/{adresse}', [AdresseController::class, 'destroy'])->name('adresses.destroy');
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/paiements/{adresse?}', [PaiementController::class, 'index'])->name('paiements.index');
+    Route::get('/paiements/cheque/{adresse?}', [PaiementController::class, 'cheque'])->name('paiements.cheque');
+    Route::get('/paiements/paypal/{adresse?}', [PaiementController::class, 'paypal'])->name('paiements.paypal');
+});
+
+Route::view('/erreur-connexion', 'erreur-connexion')->name('erreur.connexion');

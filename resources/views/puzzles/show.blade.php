@@ -7,7 +7,8 @@
 
     <div class="py-6">
         <div class="max-w-3xl mx-auto sm:px-6 lg:px-8 bg-white p-6 rounded shadow">
-            <img src="{{ $puzzle->image }}" alt="{{ $puzzle->nom }}" class="w-full h-64 object-cover mb-4 rounded">
+        <img src="{{ asset('images/puzzles/' . $puzzle->image) }}" alt="{{ $puzzle->nom }}" class="w-full h-64 object-cover mb-4 rounded">
+
             
             <h3 class="font-semibold text-2xl mb-2">{{ $puzzle->nom }}</h3>
             <p class="text-gray-600 mb-4">{{ $puzzle->description }}</p>
@@ -20,11 +21,11 @@
                 Retour
             </a>
             <form action="{{ route('paniers.store', $puzzle->id) }}" method="POST">
-    @csrf
-    <button type="submit" class="px-4 py-2 bg-sky-500 text-white rounded hover:bg-sky-600">
-        Ajouter au panier
-    </button>
-</form>
+                @csrf
+                <button type="submit" class="px-4 py-2 bg-sky-500 text-white rounded hover:bg-sky-600">
+                    Ajouter au panier
+                </button>
+            </form>
 
 
         </div>

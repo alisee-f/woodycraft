@@ -11,12 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('paniers', function (Blueprint $table) {
-            $table->id();
-            $table->string('statut');
-            $table->string('mode_paiement')->nullable();
+        Schema::table('adresses', function (Blueprint $table) {
             $table->timestamps();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
         });
     }
 
@@ -25,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('paniers');
+        Schema::table('adresses', function (Blueprint $table) {
+            //
+        });
     }
 };

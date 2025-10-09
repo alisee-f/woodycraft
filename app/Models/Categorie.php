@@ -9,6 +9,8 @@ class Categorie extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['nom', 'image'];
+
     public function puzzles(){
         return $this->hasMany(Puzzle::class, 'categorie_id');
     }
