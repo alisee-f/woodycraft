@@ -23,9 +23,21 @@ class Puzzle extends Model
     }
 
     public function paniers()
-{
-    return $this->belongsToMany(Panier::class, 'appartient')
-                ->withPivot('quantite')
-                ->withTimestamps();
-}
+    {
+        return $this->belongsToMany(Panier::class, 'appartient')
+                    ->withPivot('quantite')
+                    ->withTimestamps();
+    }
+
+    public function avis()
+    {
+        return $this->hasMany(Avis::class);
+    }
+
+    public function appartients()
+    {
+        return $this->hasMany(Appartient::class);
+    }
+
+
 }

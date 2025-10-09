@@ -53,6 +53,7 @@ class PuzzleController extends Controller
      */
     public function show(Puzzle $puzzle)
     {
+        $puzzle->load('avis.user');
         return view('puzzles.show', compact('puzzle'));
     }
 
