@@ -7,7 +7,10 @@
 
     <div class="py-6">
         <div class="max-w-3xl mx-auto sm:px-6 lg:px-8 bg-white p-6 rounded shadow">
-            <img src="{{ asset('images/puzzles/' . $puzzle->image) }}" alt="{{ $puzzle->nom }}" class="w-full h-64 object-cover mb-4 rounded">
+        <img src="{{ asset('images/puzzles/' . $puzzle->image) }}" 
+        alt="{{ $puzzle->nom }}" 
+        class="w-32 h-32 object-contain rounded shadow">
+
 
             <h3 class="font-semibold text-2xl mb-2">{{ $puzzle->nom }}</h3>
             <p class="text-gray-600 mb-4">{{ $puzzle->description }}</p>

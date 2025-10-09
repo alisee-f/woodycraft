@@ -20,9 +20,10 @@
                 @forelse($categorie->puzzles as $puzzle)
                     <div class="bg-white rounded-xl shadow-lg p-4 text-center">
                         {{-- Image produit --}}
-                        <img src="{{ asset('images/puzzles/'.$puzzle->image) }}" 
-                             alt="{{ $puzzle->nom }}" 
-                             class="w-full h-32 object-cover rounded-md mb-3">
+                        <img src="{{ asset('images/puzzles/' . $puzzle->image) }}" 
+                        alt="{{ $puzzle->nom }}" 
+                        class="w-32 h-32 object-contain rounded shadow">
+
 
                         {{-- Nom produit (ligne 1) --}}
                         <p class="text-gray-800 font-semibold">

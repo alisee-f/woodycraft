@@ -32,7 +32,10 @@
                         <div class="flex overflow-x-auto space-x-4 py-4">
                             @foreach($categorie->puzzles as $puzzle)
                                 <div class="flex-none w-48 bg-white rounded-xl shadow-lg p-4 text-center">
-                                    <img src="{{ asset('images/puzzles/'.$puzzle->image) }}" alt="{{ $puzzle->nom }}" class="w-full h-32 object-cover rounded-md mb-2">
+                                <img src="{{ asset('images/puzzles/' . $puzzle->image) }}" 
+                                alt="{{ $puzzle->nom }}" 
+                                class="w-32 h-32 object-contain rounded shadow">
+
                                     <p class="text-gray-800 font-semibold">
     <a href="{{ route('puzzles.show', $puzzle->id) }}" 
        class="hover:text-sky-500 transition">
