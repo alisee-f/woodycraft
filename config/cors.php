@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['*'],
+    'allowed_origins' => ['*'], #à modifier pour que l'API puisse se connecter, ne pas laisser * sinon tout le monde peut se connecter --> pas sécurisé
 
     'allowed_origins_patterns' => [],
 
